@@ -1,0 +1,21 @@
+# Shared guard (dominikbullo/actions/timeout-guard): every job here needs `timeout-minutes` <= 10 (owner CI budget:
+# ~5 min target, hard 10 min cutoff). A job known not to fit is listed below with its measured evidence; a cut job
+# is reported by the homelab CI watcher (dominikbullo/homelab#3326).
+name: timeout-guard
+on:
+  pull_request:
+    paths: [".github/workflows/**"]
+  push:
+    branches: ["master"]
+    paths: [".github/workflows/**"]
+permissions:
+  contents: read
+jobs:
+  timeout-guard:
+    runs-on: ubuntu-latest
+    timeout-minutes: 5
+    steps:
+      - uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7.0.1
+        with:
+          persist-credentials: false
+      - uses: dominikbullo/actions/timeout-guard@4bb7ba44372c4eae7b68d4182f4144ee39a8f055 # main (dominikbullo/actions#9)
